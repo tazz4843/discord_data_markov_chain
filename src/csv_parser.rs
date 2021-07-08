@@ -1,16 +1,10 @@
-use serde_derive::Deserialize;
+use crate::model::Record;
+use csv::ReaderBuilder;
 
-#[derive(Deserialize)]
-pub struct Record {
-    #[serde(rename = "ID")]
-    pub id: u64,
-
-    #[serde(rename = "Timestamp")]
-    pub timestamp: String,
-
-    #[serde(rename = "Contents")]
-    pub contents: String,
-
-    #[serde(rename = "Attachments")]
-    pub attachments: Option<String>,
+pub fn parse_csv_file(data: &[u8]) -> Vec<Record> {
+    ReaderBuilder::new()
+        .from_reader(data)
+        .deserialize()
+        .filter_map(|i| i.ok())
+        .collect()
 }
