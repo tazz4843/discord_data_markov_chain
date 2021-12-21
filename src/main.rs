@@ -29,13 +29,23 @@ fn main() {
                         .map_err(|_| "couldn't parse count as a integer".to_string())
                 }),
         )
+        .arg(
+            Arg::with_name("skip")
+                .long("skip")
+                .multiple(true)
+                .value_name("SKIP")
+                .help("skip adding messages with this content")
+                .takes_value(true)
+        )
         .get_matches();
 
+    let to_skip = args.values_of("count").expect("something went wrong").collect();
     entrypoint(
         &Path::new(args.value_of("msg_dir").expect("something went wrong")),
         args.value_of("count")
             .expect("something went wrong")
             .parse()
             .expect("something went wrong"),
+        to_skip
     );
 }
